@@ -18,7 +18,7 @@ import retrofit2.create
 
 class DataDependencies (private val context: Context){
 
-    val albumsRepository: AlbumRepository by lazy { AlbumRepositoryImpl(apiService) }
+    val albumsRepository: AlbumRepository by lazy { AlbumRepositoryImpl(apiService, albumDao) }
 
     private val apiService: AlbumApiService by lazy { retrofit.create<AlbumApiService>() }
 

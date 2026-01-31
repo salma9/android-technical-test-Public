@@ -14,8 +14,11 @@ import fr.leboncoin.androidrecruitmenttestapp.utils.AnalyticsHelper
 
 class DetailsActivity : ComponentActivity() {
 
+    private val dependencies by lazy {
+        (application as AppDependenciesProvider).dependencies
+    }
+
     private val analyticsHelper: AnalyticsHelper by lazy {
-        val dependencies = (application as AppDependenciesProvider).dependencies
         dependencies.analyticsHelper
     }
 
@@ -23,8 +26,11 @@ class DetailsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //get album ID for tracking
+        val albumId = intent.getIntExtra("ALBUM_ID", -1)
+
         analyticsHelper.initialize(this)
-        analyticsHelper.trackScreenView("Details")
+        analyticsHelper.trackScreenView("Details_$albumId")
 
         setContent {
             SparkTheme {

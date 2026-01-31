@@ -1,6 +1,5 @@
 package fr.leboncoin.androidrecruitmenttestapp.ui
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
+import com.adevinta.spark.components.text.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,13 +26,13 @@ import com.adevinta.spark.ExperimentalSparkApi
 import com.adevinta.spark.SparkTheme
 import com.adevinta.spark.components.card.Card
 import com.adevinta.spark.components.chips.ChipTinted
-import fr.leboncoin.data.network.model.AlbumDto
+import fr.leboncoin.domain.model.Album
 
 @OptIn(ExperimentalSparkApi::class)
 @Composable
 fun AlbumItem(
-    album: AlbumDto,
-    onItemSelected : (AlbumDto) -> Unit,
+    album: Album,
+    onItemSelected : (Album) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -55,7 +54,7 @@ fun AlbumItem(
                     .crossfade(true)
                     .build(),
                 contentDescription = album.title,
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1f),
                 contentScale = ContentScale.Crop
