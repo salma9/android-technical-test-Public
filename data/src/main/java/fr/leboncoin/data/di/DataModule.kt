@@ -1,9 +1,14 @@
 package fr.leboncoin.data.di
 
+import android.content.Context
+import androidx.room.Room
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import fr.leboncoin.data.BuildConfig
+import fr.leboncoin.data.database.AppDatabase
+import fr.leboncoin.data.database.dao.AlbumDao
 import fr.leboncoin.data.network.api.AlbumApiService
-import fr.leboncoin.data.repository.AlbumRepository
+import fr.leboncoin.data.repository.AlbumRepositoryImpl
+import fr.leboncoin.domain.repository.AlbumRepository
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -11,9 +16,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
 
-class DataDependencies {
+class DataDependencies (private val context: Context){
 
-    val albumsRepository: AlbumRepository by lazy { AlbumRepository(apiService) }
+    val albumsRepository: AlbumRepository by lazy { AlbumRepositoryImpl(apiService) }
 
     private val apiService: AlbumApiService by lazy { retrofit.create<AlbumApiService>() }
 
@@ -44,4 +49,16 @@ class DataDependencies {
             coerceInputValues = true
         }
     }
+
+    private val database: AppDatabase by lazy {
+        Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            "albums_db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    private val albumDao: AlbumDao by lazy { database.albumDao() }
 }
