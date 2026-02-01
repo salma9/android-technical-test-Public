@@ -7,9 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
 import com.adevinta.spark.SparkTheme
-import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsActivity
 import fr.leboncoin.androidrecruitmenttestapp.di.AppDependenciesProvider
+import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsActivity
 import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsActivity.Companion.EXTRA_ALBUM_ID
+import fr.leboncoin.androidrecruitmenttestapp.ui.common.ViewModelFactory
 import fr.leboncoin.androidrecruitmenttestapp.ui.components.AlbumsScreen
 import fr.leboncoin.androidrecruitmenttestapp.utils.AnalyticsHelper
 
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private val viewModel: AlbumsViewModel by lazy {
-        val factory = AlbumsViewModel.Factory(dependencies.dataDependencies.albumsRepository)
+        val factory = ViewModelFactory(dependencies.dataDependencies.albumsRepository)
         ViewModelProvider(this, factory)[AlbumsViewModel::class.java]
     }
 

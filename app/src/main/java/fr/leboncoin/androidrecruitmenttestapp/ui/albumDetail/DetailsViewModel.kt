@@ -1,7 +1,6 @@
 package fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.repository.AlbumRepository
@@ -30,9 +29,4 @@ class DetailsViewModel(
         }
     }
 
-    class Factory(private val albumId: Int, private val repository: AlbumRepository) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DetailsViewModel(albumId, repository) as T
-        }
-    }
 }

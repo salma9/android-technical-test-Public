@@ -1,39 +1,31 @@
 package fr.leboncoin.androidrecruitmenttestapp.ui.albumList
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsViewModel
 import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.repository.AlbumRepository
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-@OptIn(DelicateCoroutinesApi::class)
 class AlbumsViewModel(
     private val repository: AlbumRepository,
 ) : ViewModel() {
 
     private val _albums = MutableStateFlow<AlbumResult<List<Album>>>(AlbumResult.Loading())
-    val albums: StateFlow<AlbumResult<List<Album>>> = _albums
+    val albums: StateFlow<AlbumResult<List<Album>>> = _albums.asStateFlow()
+
+    init {
+        loadAlbums()
+    }
 
     fun loadAlbums() {
         viewModelScope.launch {
             repository.getAlbums().collect { result ->
                 _albums.value = result
             }
-        }
-    }
-
-    class Factory(
-        private val repository: AlbumRepository,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AlbumsViewModel(repository) as T
         }
     }
 }
