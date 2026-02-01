@@ -1,25 +1,59 @@
 package fr.leboncoin.androidrecruitmenttestapp
 
-import fr.leboncoin.data.network.api.AlbumApiService
-import fr.leboncoin.data.network.model.AlbumDto
-import fr.leboncoin.data.repository.AlbumRepositoryImpl
+import app.cash.turbine.test
+import fr.leboncoin.domain.AlbumResult
+import fr.leboncoin.domain.model.Album
+import fr.leboncoin.domain.repository.AlbumRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
-import java.util.logging.Logger
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AlbumsViewModelTest {
 
-    @Test
-    fun loadsAlbums_emitsNonEmptyList() {
-        val fakeService = object : AlbumApiService {
-            override suspend fun getAlbums(): List<AlbumDto> = listOf(
-                AlbumDto(id = 1, albumId = 1, title = "t", url = "u", thumbnailUrl = "tu")
-            )
-        }
-        val repository = AlbumRepositoryImpl(fakeService)
-        val vm = AlbumsViewModel(Logger.getGlobal(), repository)
+    private val testDispatcher = StandardTestDispatcher()
 
-        assertTrue("Expected albums to be loaded", vm.albums.value.isNotEmpty())
+    @Before
+    fun setup() {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun down() {
+        Dispatchers.resetMain()
+    }
+
+    @Test
+    fun loadsAlbums_emitsNonEmptyList() = runTest {
+        val album = Album(id = 1, albumId = 1, title = "Test", url = "test", thumbnailUrl = "test")
+        val repository = object : AlbumRepository {
+            override fun getAlbums(): Flow<AlbumResult<List<Album>>> =
+                flowOf(AlbumResult.Success(listOf(album)))
+        }
+
+        val viewModel = AlbumsViewModel(repository)
+
+        viewModel.albums.test {
+            val firstItem = awaitItem()
+            assertTrue(firstItem is AlbumResult.Loading)
+
+            viewModel.loadAlbums()
+
+            val secondItem = awaitItem()
+            assertTrue(secondItem is AlbumResult.Success)
+            assertTrue(secondItem.data?.isNotEmpty() == true)
+
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }
 
