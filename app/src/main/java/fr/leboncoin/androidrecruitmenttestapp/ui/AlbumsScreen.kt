@@ -1,5 +1,6 @@
 package fr.leboncoin.androidrecruitmenttestapp.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import com.adevinta.spark.components.text.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,6 +23,9 @@ import fr.leboncoin.androidrecruitmenttestapp.AlbumsViewModel
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.AlbumResult
 
+
+@SuppressLint("MaterialComposableUsageDetector")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumsScreen(
     viewModel: AlbumsViewModel,
@@ -27,11 +33,13 @@ fun AlbumsScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.albums.collectAsStateWithLifecycle()
-
+    val isRefreshing = state is AlbumResult.Loading && !state.data.isNullOrEmpty()
     LaunchedEffect(Unit) { viewModel.loadAlbums() }
 
     Scaffold(modifier = modifier) { paddingValues ->
-        Box(
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = { viewModel.loadAlbums() },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
