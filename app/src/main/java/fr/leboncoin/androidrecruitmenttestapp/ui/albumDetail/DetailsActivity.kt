@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.adevinta.spark.SparkTheme
 import fr.leboncoin.androidrecruitmenttestapp.di.AppDependenciesProvider
 import fr.leboncoin.androidrecruitmenttestapp.ui.common.ViewModelFactory
-import fr.leboncoin.androidrecruitmenttestapp.ui.components.DetailsScreen
 import fr.leboncoin.androidrecruitmenttestapp.utils.AnalyticsHelper
 
 class DetailsActivity : ComponentActivity() {

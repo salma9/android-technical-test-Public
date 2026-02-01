@@ -11,7 +11,6 @@ import fr.leboncoin.androidrecruitmenttestapp.di.AppDependenciesProvider
 import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsActivity
 import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsActivity.Companion.EXTRA_ALBUM_ID
 import fr.leboncoin.androidrecruitmenttestapp.ui.common.ViewModelFactory
-import fr.leboncoin.androidrecruitmenttestapp.ui.components.AlbumsScreen
 import fr.leboncoin.androidrecruitmenttestapp.utils.AnalyticsHelper
 
 class MainActivity : ComponentActivity() {

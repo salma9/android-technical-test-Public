@@ -1,4 +1,4 @@
-package fr.leboncoin.androidrecruitmenttestapp.ui.components
+package fr.leboncoin.androidrecruitmenttestapp.ui.albumList
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.adevinta.spark.components.scaffold.Scaffold
-import fr.leboncoin.androidrecruitmenttestapp.ui.albumList.AlbumsViewModel
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.AlbumResult
 

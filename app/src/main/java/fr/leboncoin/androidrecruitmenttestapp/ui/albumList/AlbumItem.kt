@@ -1,4 +1,4 @@
-package fr.leboncoin.androidrecruitmenttestapp.ui.components
+package fr.leboncoin.androidrecruitmenttestapp.ui.albumList
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,26 +9,17 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import com.adevinta.spark.components.text.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import coil3.network.NetworkHeaders
-import coil3.network.httpHeaders
-import coil3.request.CachePolicy
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import com.adevinta.spark.ExperimentalSparkApi
 import com.adevinta.spark.SparkTheme
 import com.adevinta.spark.components.card.Card
 import com.adevinta.spark.components.chips.ChipTinted
-import fr.leboncoin.androidrecruitmenttestapp.R
+import com.adevinta.spark.components.text.Text
+import fr.leboncoin.androidrecruitmenttestapp.ui.components.RemoteImage
 import fr.leboncoin.domain.model.Album
 
 @OptIn(ExperimentalSparkApi::class)
@@ -46,24 +37,12 @@ fun AlbumItem(
         onClick = { onItemSelected(album) },
     ) {
         Row {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(album.thumbnailUrl)
-                    .diskCachePolicy(CachePolicy.ENABLED)
-                    .httpHeaders(
-                        NetworkHeaders.Builder()
-                            .add("User-Agent", "LeboncoinApp/1.0")
-                            .build()
-                    )
-                    .crossfade(true)
-                    .build(),
+            RemoteImage(
+                url = album.thumbnailUrl,
                 contentDescription = album.title,
-                placeholder = painterResource(R.drawable.baseline_error_outline_24),
-                error = painterResource(R.drawable.baseline_error_outline_24),
                 modifier = Modifier
                     .fillMaxHeight()
-                    .aspectRatio(1f),
-                contentScale = ContentScale.Crop
+                    .aspectRatio(1f)
             )
 
             Column(
