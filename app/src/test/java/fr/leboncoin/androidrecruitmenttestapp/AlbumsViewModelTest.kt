@@ -1,6 +1,7 @@
 package fr.leboncoin.androidrecruitmenttestapp
 
 import app.cash.turbine.test
+import fr.leboncoin.androidrecruitmenttestapp.ui.albumList.AlbumsViewModel
 import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.repository.AlbumRepository

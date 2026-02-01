@@ -1,4 +1,4 @@
-package fr.leboncoin.androidrecruitmenttestapp
+package fr.leboncoin.androidrecruitmenttestapp.ui.albumList
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
 import com.adevinta.spark.SparkTheme
+import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsActivity
 import fr.leboncoin.androidrecruitmenttestapp.di.AppDependenciesProvider
-import fr.leboncoin.androidrecruitmenttestapp.ui.AlbumsScreen
+import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsActivity.Companion.EXTRA_ALBUM_ID
+import fr.leboncoin.androidrecruitmenttestapp.ui.components.AlbumsScreen
 import fr.leboncoin.androidrecruitmenttestapp.utils.AnalyticsHelper
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +41,7 @@ class MainActivity : ComponentActivity() {
                     onItemSelected = { album ->
                         analyticsHelper.trackSelection(album.id.toString())
                         val intent = Intent(this, DetailsActivity::class.java).apply {
-                            putExtra("ALBUM_ID", album.id)
+                            putExtra(EXTRA_ALBUM_ID, album.id)
                         }
                         startActivity(intent)
                     }

@@ -10,6 +10,8 @@ import fr.leboncoin.domain.repository.AlbumRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+
 class AlbumRepositoryImpl(
     private val albumApiService: AlbumApiService,
     private val albumDao: AlbumDao
@@ -50,4 +52,6 @@ class AlbumRepositoryImpl(
             ))
         }
     }
+
+    override fun getAlbumById(id: Int): Flow<Album?> = albumDao.getAlbumById(id).map { it?.toAlbum() }
 }

@@ -1,8 +1,7 @@
-package fr.leboncoin.androidrecruitmenttestapp.ui
+package fr.leboncoin.androidrecruitmenttestapp.ui.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.adevinta.spark.components.scaffold.Scaffold
-import fr.leboncoin.androidrecruitmenttestapp.AlbumsViewModel
+import fr.leboncoin.androidrecruitmenttestapp.ui.albumList.AlbumsViewModel
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.AlbumResult
 

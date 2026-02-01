@@ -19,4 +19,7 @@ interface AlbumDao {
     @Query("DELETE FROM albums")
     suspend fun clearAll()
 
+    @Query("SELECT * FROM albums WHERE id = :id")
+    fun getAlbumById(id: Int): Flow<AlbumEntity?>
+
 }

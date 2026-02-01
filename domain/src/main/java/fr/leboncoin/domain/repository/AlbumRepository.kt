@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface AlbumRepository {
 
     fun getAlbums(): Flow<AlbumResult<List<Album>>>
+    fun getAlbumById(id: Int): Flow<Album?>
 }

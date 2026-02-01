@@ -1,8 +1,9 @@
-package fr.leboncoin.androidrecruitmenttestapp
+package fr.leboncoin.androidrecruitmenttestapp.ui.albumList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsViewModel
 import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.repository.AlbumRepository
