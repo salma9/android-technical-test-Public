@@ -1,7 +1,6 @@
-package fr.leboncoin.androidrecruitmenttestapp
+package fr.leboncoin.androidrecruitmenttestapp.ui.albumList
 
 import app.cash.turbine.test
-import fr.leboncoin.androidrecruitmenttestapp.ui.albumList.AlbumsViewModel
 import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.repository.AlbumRepository
@@ -14,7 +13,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertTrue
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -39,22 +38,23 @@ class AlbumsViewModelTest {
         val repository = object : AlbumRepository {
             override fun getAlbums(): Flow<AlbumResult<List<Album>>> =
                 flowOf(AlbumResult.Success(listOf(album)))
+
+            override fun getAlbumById(id: Int): Flow<Album?> = throw Exception("Not used")
         }
 
         val viewModel = AlbumsViewModel(repository)
 
         viewModel.albums.test {
             val firstItem = awaitItem()
-            assertTrue(firstItem is AlbumResult.Loading)
+            Assert.assertTrue(firstItem is AlbumResult.Loading)
 
             viewModel.loadAlbums()
 
             val secondItem = awaitItem()
-            assertTrue(secondItem is AlbumResult.Success)
-            assertTrue(secondItem.data?.isNotEmpty() == true)
+            Assert.assertTrue(secondItem is AlbumResult.Success)
+            Assert.assertTrue(secondItem.data?.isNotEmpty() == true)
 
             cancelAndIgnoreRemainingEvents()
         }
     }
 }
-
