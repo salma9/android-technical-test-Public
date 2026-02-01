@@ -25,11 +25,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.adevinta.spark.SparkTheme
 import fr.leboncoin.androidrecruitmenttestapp.ui.components.FullScreenLoading
 import fr.leboncoin.androidrecruitmenttestapp.ui.components.RemoteImage
+import fr.leboncoin.androidrecruitmenttestapp.ui.theme.AppTheme
 
 @SuppressLint("MaterialComposableUsageDetector")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,7 +85,7 @@ fun DetailsScreen(
                     ) {
                         Text(
                             text = item.title,
-                            style = SparkTheme.typography.headline1,
+                            style = SparkTheme.typography.display1,
                             color = SparkTheme.colors.onSurface
                         )
 

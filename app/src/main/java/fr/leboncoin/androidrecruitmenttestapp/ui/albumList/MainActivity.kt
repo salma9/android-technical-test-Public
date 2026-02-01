@@ -6,11 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
-import com.adevinta.spark.SparkTheme
 import fr.leboncoin.androidrecruitmenttestapp.di.AppDependenciesProvider
 import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsActivity
 import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsActivity.Companion.EXTRA_ALBUM_ID
 import fr.leboncoin.androidrecruitmenttestapp.ui.common.ViewModelFactory
+import fr.leboncoin.androidrecruitmenttestapp.ui.theme.AppTheme
 import fr.leboncoin.androidrecruitmenttestapp.utils.AnalyticsHelper
 
 class MainActivity : ComponentActivity() {
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         analyticsHelper.initialize(this)
 
         setContent {
-            SparkTheme {
+            AppTheme {
                 AlbumsScreen(
                     viewModel = viewModel,
                     onItemSelected = { album ->

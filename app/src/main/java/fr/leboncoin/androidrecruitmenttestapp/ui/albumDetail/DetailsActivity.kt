@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.ViewModelProvider
-import com.adevinta.spark.SparkTheme
 import fr.leboncoin.androidrecruitmenttestapp.di.AppDependenciesProvider
 import fr.leboncoin.androidrecruitmenttestapp.ui.common.ViewModelFactory
+import fr.leboncoin.androidrecruitmenttestapp.ui.theme.AppTheme
 import fr.leboncoin.androidrecruitmenttestapp.utils.AnalyticsHelper
 
 class DetailsActivity : ComponentActivity() {
@@ -36,7 +36,7 @@ class DetailsActivity : ComponentActivity() {
         analyticsHelper.trackScreenView("Details_$albumId")
 
         setContent {
-            SparkTheme {
+            AppTheme {
                 DetailsScreen(viewModel = viewModel, onBack = { finish() })
             }
         }
