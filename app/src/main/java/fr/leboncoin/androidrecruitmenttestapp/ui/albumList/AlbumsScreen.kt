@@ -48,18 +48,28 @@ fun AlbumsScreen(
                     if (albums.isNullOrEmpty()) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     } else {
-                        AlbumList(albums = albums, onItemSelected = onItemSelected)
+                        AlbumList(
+                            albums = albums,
+                            onItemSelected = onItemSelected,
+                            onFavoriteClick = { album -> viewModel.onFavoriteClicked(album) }
+                        )
                     }
                 }
 
                 is AlbumResult.Success -> {
-                    AlbumList(albums = result.data ?: emptyList(), onItemSelected = onItemSelected)
+                    AlbumList(albums = result.data ?: emptyList(),
+                        onItemSelected = onItemSelected,
+                        onFavoriteClick = { album -> viewModel.onFavoriteClicked(album) }
+                    )
                 }
 
                 is AlbumResult.Error -> {
                     val albums = result.data
                     if (!albums.isNullOrEmpty()) {
-                        AlbumList(albums = albums, onItemSelected = onItemSelected)
+                        AlbumList(albums = albums,
+                            onItemSelected = onItemSelected,
+                            onFavoriteClick = { album -> viewModel.onFavoriteClicked(album) }
+                        )
                     } else {
                         Text(
                             text = result.message ?: "Erreur inconnue",
@@ -76,7 +86,8 @@ fun AlbumsScreen(
 @Composable
 private fun AlbumList(
     albums: List<Album>,
-    onItemSelected: (Album) -> Unit
+    onItemSelected: (Album) -> Unit,
+    onFavoriteClick: (Album) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -88,6 +99,7 @@ private fun AlbumList(
             AlbumItem(
                 album = album,
                 onItemSelected = onItemSelected,
+                onFavoriteClick = { onFavoriteClick(album) }
             )
         }
     }

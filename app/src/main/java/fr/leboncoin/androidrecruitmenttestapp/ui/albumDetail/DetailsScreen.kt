@@ -1,10 +1,8 @@
 package fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,13 +23,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.adevinta.spark.SparkTheme
+import com.adevinta.spark.components.chips.ChipTinted
 import fr.leboncoin.androidrecruitmenttestapp.ui.components.FullScreenLoading
 import fr.leboncoin.androidrecruitmenttestapp.ui.components.RemoteImage
-import fr.leboncoin.androidrecruitmenttestapp.ui.theme.AppTheme
 
 @SuppressLint("MaterialComposableUsageDetector")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,24 +88,11 @@ fun DetailsScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        InfoRow(label = "ID Album", value = item.albumId.toString())
-                        InfoRow(label = "ID Photo", value = item.id.toString())
+                        ChipTinted(text = "Album #${item.albumId}")
+                        ChipTinted(text = "Track #${item.id}")
                     }
                 }
             } ?: FullScreenLoading()
         }
-    }
-}
-
-@Composable
-private fun InfoRow(label: String, value: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = label, style = SparkTheme.typography.body2, color = SparkTheme.colors.onSurface)
-        Text(text = value, style = SparkTheme.typography.body1, color = SparkTheme.colors.onSurface)
     }
 }

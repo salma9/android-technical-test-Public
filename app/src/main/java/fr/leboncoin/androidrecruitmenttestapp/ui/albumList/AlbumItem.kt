@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +21,8 @@ import com.adevinta.spark.ExperimentalSparkApi
 import com.adevinta.spark.SparkTheme
 import com.adevinta.spark.components.card.Card
 import com.adevinta.spark.components.chips.ChipTinted
+import com.adevinta.spark.components.icons.Icon
+import com.adevinta.spark.components.icons.IconButton
 import com.adevinta.spark.components.text.Text
 import fr.leboncoin.androidrecruitmenttestapp.ui.components.RemoteImage
 import fr.leboncoin.domain.model.Album
@@ -26,7 +31,8 @@ import fr.leboncoin.domain.model.Album
 @Composable
 fun AlbumItem(
     album: Album,
-    onItemSelected : (Album) -> Unit,
+    onItemSelected: (Album) -> Unit,
+    onFavoriteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -60,15 +66,26 @@ fun AlbumItem(
                 Spacer(Modifier.weight(1f))
 
                 Row(
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    ChipTinted(
-                        text = "Album #${album.albumId}"
-                    )
-                    ChipTinted(
-                        text = "Track #${album.id}"
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        ChipTinted(text = "Album #${album.albumId}")
+                        ChipTinted(text = "Track #${album.id}")
+                    }
+
+                    IconButton(
+                        onClick = onFavoriteClick,
+                    ) {
+                        Icon(
+                            imageVector = if (album.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = "Favori",
+                            tint = if (album.isFavorite) SparkTheme.colors.error else SparkTheme.colors.onSurface
+                        )
+                    }
                 }
             }
         }

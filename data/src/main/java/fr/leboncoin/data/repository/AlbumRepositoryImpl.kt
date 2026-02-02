@@ -9,52 +9,61 @@ import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.repository.AlbumRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AlbumRepositoryImpl(
+@Singleton
+class AlbumRepositoryImpl @Inject constructor(
     private val albumApiService: AlbumApiService,
     private val albumDao: AlbumDao
 ): AlbumRepository {
 
     override fun getAlbums(): Flow<AlbumResult<List<Album>>> = flow {
-        // check data on local mode
-        val localAlbums = albumDao.getAllAlbums().first().map { it.toAlbum() }
-        emit(AlbumResult.Loading(data = localAlbums))
+        // check local storage
+        val localFlow = albumDao.getAllAlbums().map { entities ->
+            AlbumResult.Success(entities.map { it.toAlbum() })
+        }
+
+        // send initial data
+        val initialData = albumDao.getAllAlbums().first()
+        emit(AlbumResult.Loading(data = initialData.map { it.toAlbum() }))
 
         try {
-            // check data on remote
+            // check remote data
             val remoteAlbums = albumApiService.getAlbums()
 
-            //get favorite albums ID
-            val favoritesIds = localAlbums.filter { it.isFavorite }.map { it.id }.toSet()
+            // check If Album is already in favorites
+            val favoritesIds = initialData.filter { it.isFavorite }.map { it.id }.toSet()
 
-            // mapping
-            val entitiesToInsert = remoteAlbums.map { dto ->
+            // Mapping
+            val entities = remoteAlbums.map { dto ->
                 AlbumEntity(
                     id = dto.id,
                     albumId = dto.albumId,
                     title = dto.title,
                     url = dto.url,
                     thumbnailUrl = dto.thumbnailUrl,
-                    isFavorite = favoritesIds.contains(dto.id) // check if album is favorite
+                    isFavorite = favoritesIds.contains(dto.id)
                 )
             }
 
-            albumDao.insertAlbums(entitiesToInsert)
+            // update DB
+            albumDao.insertAlbums(entities)
 
-            // emit success result
-            val updatedCache = albumDao.getAllAlbums().first().map { it.toAlbum() }
-            emit(AlbumResult.Success(updatedCache))
+            // emit local flow
+            emitAll(localFlow)
 
         } catch (e: Exception) {
-            // emit error result
             emit(AlbumResult.Error(
                 message = "Failed to get album list. Please try again later.",
-                data = localAlbums
+                data = initialData.map { it.toAlbum() }
             ))
-            Log.e("AlbumRepository", "getAlbums fail: $e")
+            Log.e("AlbumRepository", "Network fetch failed, falling back to cache", e)
+
         }
     }
 
