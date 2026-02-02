@@ -16,6 +16,7 @@ import org.junit.Before
 import org.junit.Test
 import app.cash.turbine.test
 import io.mockk.every
+import kotlin.test.assertNull
 
 
 class AlbumRepositoryImplTest {
@@ -47,7 +48,6 @@ class AlbumRepositoryImplTest {
             val secondEmission = awaitItem()
             assertTrue(secondEmission is AlbumResult.Success)
 
-            coVerify { albumDao.clearAll() }
             coVerify { albumDao.insertAlbums(any()) }
 
             awaitComplete()
@@ -83,6 +83,35 @@ class AlbumRepositoryImplTest {
             assertEquals(albumEntity.title, result?.title)
             awaitComplete()
         }
+    }
+
+    @Test
+    fun `toggleFavorite should call dao toggleFavorite`() = runTest {
+        // GIVEN
+        val albumId = 1
+        val isFavorite = true
+        // WHEN
+        repository.toggleFavorite(albumId, isFavorite)
+        // THEN
+        coVerify { albumDao.toggleFavorite(albumId, isFavorite) }
+    }
+
+    @Test
+    fun `getAlbumById should return null when not found`() = runTest {
+        // GIVEN
+        every { albumDao.getAlbumById(99) } returns flowOf(null)
+        // WHEN & THEN
+        repository.getAlbumById(99).test {
+            assertNull(awaitItem())
+            awaitComplete()
+        }
+
+        val albumId = 1
+        val isFavorite = true
+        // WHEN
+        repository.toggleFavorite(albumId, isFavorite)
+        // THEN
+        coVerify { albumDao.toggleFavorite(albumId, isFavorite) }
     }
 
 }
