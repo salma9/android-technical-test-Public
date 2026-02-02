@@ -36,23 +36,25 @@ android {
     buildFeatures {
         buildConfig = true
     }
+}
 
-    dependencies {
-        implementation(project(":domain"))
+dependencies {
+    implementation(project(":domain"))
 
-        implementation(libs.retrofit.core)
-        implementation(libs.retrofit.kotlin.serialization)
-        implementation(libs.okhttp.logging)
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.okhttp.logging)
 
-        implementation(libs.kotlin.serialization.json)
+    implementation(libs.kotlin.serialization.json)
 
-        // Room
-        implementation(libs.androidx.room.runtime)
-        ksp(libs.androidx.room.compiler)
-        implementation(libs.androidx.room.ktx)
+    // Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
-        testImplementation(libs.junit)
-        androidTestImplementation(libs.androidx.junit) // Useless dependency
-        androidTestImplementation(libs.androidx.espresso.core) // Useless dependency
-    }
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation (libs.kotlin.test)
+    testImplementation(libs.turbine)
+    testImplementation(libs.mockk)
 }

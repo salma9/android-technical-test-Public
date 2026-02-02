@@ -36,8 +36,8 @@ android {
     buildFeatures {
         buildConfig = true
     }
+}
 
-    dependencies {
-        implementation(libs.kotlinx.coroutines.core)
-    }
+dependencies {
+    implementation(libs.kotlinx.coroutines.core)
 }
