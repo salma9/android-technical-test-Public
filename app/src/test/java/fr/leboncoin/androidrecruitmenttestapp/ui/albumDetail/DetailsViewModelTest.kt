@@ -1,5 +1,6 @@
 package fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
@@ -48,7 +49,8 @@ class DetailsViewModelTest {
             override fun getAlbums(): Flow<AlbumResult<List<Album>>> = throw Exception("Not used")
         }
 
-        val viewModel = DetailsViewModel(albumId = 42, repository = repository)
+        val savedStateHandle = SavedStateHandle(mapOf("ALBUM_ID" to 42))
+        val viewModel = DetailsViewModel(savedStateHandle = savedStateHandle, repository = repository)
 
         viewModel.album.test {
             assertEquals(null, awaitItem())

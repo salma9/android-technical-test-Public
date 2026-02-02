@@ -57,7 +57,7 @@ class AlbumRepositoryImplTest {
     @Test
     fun `getAlbums should emit error but keep cache when api fails`() = runTest {
         // GIVEN
-        coEvery { albumDao.getAllAlbums() } returns flowOf(listOf(albumEntity))
+        every { albumDao.getAllAlbums() } returns flowOf(listOf(albumEntity))
         coEvery { apiService.getAlbums() } throws Exception("Network Error")
 
         // WHEN & THEN
@@ -67,8 +67,7 @@ class AlbumRepositoryImplTest {
             val errorEmission = awaitItem()
             assertTrue(errorEmission is AlbumResult.Error)
             assertEquals(1, errorEmission.data?.size)
-            assertTrue(errorEmission.message!!.contains("Network Error"))
-
+            assertEquals("Failed to get album list. Please try again later.", errorEmission.message)
             cancelAndIgnoreRemainingEvents()
         }
     }

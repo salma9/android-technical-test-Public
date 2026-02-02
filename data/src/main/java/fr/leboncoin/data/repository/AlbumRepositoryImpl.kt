@@ -1,5 +1,6 @@
 package fr.leboncoin.data.repository
 
+import android.util.Log
 import fr.leboncoin.data.database.dao.AlbumDao
 import fr.leboncoin.data.database.entity.AlbumEntity
 import fr.leboncoin.data.mapper.toAlbum
@@ -46,8 +47,9 @@ class AlbumRepositoryImpl(
 
         } catch (e: Exception) {
             // emit error result
+            Log.e("AlbumRepositoryImpl", "getAlbums: ", e)
             emit(AlbumResult.Error(
-                message = "Failed to get album list from remote server : ${e.localizedMessage}",
+                message = "Failed to get album list. Please try again later.",
                 data = cache
             ))
         }
