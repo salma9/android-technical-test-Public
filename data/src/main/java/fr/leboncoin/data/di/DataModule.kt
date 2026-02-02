@@ -68,7 +68,7 @@ object DataModule {
             context,
             AppDatabase::class.java,
             "albums_db"
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration(dropAllTables = true).build()
     }
 
     @Provides
