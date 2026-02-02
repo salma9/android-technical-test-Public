@@ -2,6 +2,7 @@ package fr.leboncoin.androidrecruitmenttestapp.ui.albumList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.repository.AlbumRepository
@@ -9,8 +10,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AlbumsViewModel(
+@HiltViewModel
+class AlbumsViewModel @Inject constructor(
     private val repository: AlbumRepository,
 ) : ViewModel() {
 

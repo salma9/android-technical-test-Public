@@ -3,30 +3,23 @@ package fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.lifecycle.ViewModelProvider
-import fr.leboncoin.androidrecruitmenttestapp.di.AppDependenciesProvider
-import fr.leboncoin.androidrecruitmenttestapp.ui.common.ViewModelFactory
+import androidx.activity.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import fr.leboncoin.androidrecruitmenttestapp.ui.theme.AppTheme
 import fr.leboncoin.androidrecruitmenttestapp.utils.AnalyticsHelper
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DetailsActivity : ComponentActivity() {
-
-    private val dependencies by lazy {
-        (application as AppDependenciesProvider).dependencies
-    }
 
     private val albumId: Int by lazy {
         intent.getIntExtra(EXTRA_ALBUM_ID, -1)
     }
 
-    private val viewModel: DetailsViewModel by lazy {
-        val factory = ViewModelFactory(dependencies.dataDependencies.albumsRepository, albumId)
-        ViewModelProvider(this, factory)[DetailsViewModel::class.java]
-    }
+    private val viewModel: DetailsViewModel by viewModels()
 
-    private val analyticsHelper: AnalyticsHelper by lazy {
-        dependencies.analyticsHelper
-    }
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
