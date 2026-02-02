@@ -2,12 +2,13 @@ package fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
-import fr.leboncoin.domain.repository.AlbumRepository
+import fr.leboncoin.domain.usecases.GetAlbumByIdUseCase
+import fr.leboncoin.domain.usecases.ToggleFavoriteUseCase
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -27,7 +28,8 @@ class DetailsViewModelTest {
         albumId = 1,
         title = "Test Album",
         url = "url",
-        thumbnailUrl = "thumb"
+        thumbnailUrl = "thumb",
+        isFavorite = false
     )
 
     @Before
@@ -42,15 +44,13 @@ class DetailsViewModelTest {
 
     @Test
     fun `when initialized, fetches album details for given id`() = runTest {
-        val repository = object : AlbumRepository {
-            override fun getAlbumById(id: Int): Flow<Album?> {
-                return if (id == 42) flowOf(album) else flowOf(null)
-            }
-            override fun getAlbums(): Flow<AlbumResult<List<Album>>> = throw Exception("Not used")
-        }
+        val getAlbumByIdUseCase = mockk<GetAlbumByIdUseCase>()
+        val toggleFavoriteUseCase = mockk<ToggleFavoriteUseCase>()
+
+        every { getAlbumByIdUseCase(42) } returns flowOf(album)
 
         val savedStateHandle = SavedStateHandle(mapOf("ALBUM_ID" to 42))
-        val viewModel = DetailsViewModel(savedStateHandle = savedStateHandle, repository = repository)
+        val viewModel = DetailsViewModel(savedStateHandle, getAlbumByIdUseCase, toggleFavoriteUseCase)
 
         viewModel.album.test {
             assertEquals(null, awaitItem())

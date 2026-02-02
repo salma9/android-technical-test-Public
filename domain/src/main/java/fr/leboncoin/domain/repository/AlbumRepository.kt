@@ -8,4 +8,5 @@ interface AlbumRepository {
 
     fun getAlbums(): Flow<AlbumResult<List<Album>>>
     fun getAlbumById(id: Int): Flow<Album?>
+    suspend fun toggleFavorite(albumId: Int, currentStatus: Boolean)
 }

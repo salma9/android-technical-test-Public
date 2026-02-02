@@ -20,26 +20,29 @@ class AlbumRepositoryImpl(
 
     override fun getAlbums(): Flow<AlbumResult<List<Album>>> = flow {
         // check data on local mode
-        val cache = albumDao.getAllAlbums().first().map { it.toAlbum() }
-        emit(AlbumResult.Loading(data = cache))
+        val localAlbums = albumDao.getAllAlbums().first().map { it.toAlbum() }
+        emit(AlbumResult.Loading(data = localAlbums))
 
         try {
             // check data on remote
             val remoteAlbums = albumApiService.getAlbums()
 
+            //get favorite albums ID
+            val favoritesIds = localAlbums.filter { it.isFavorite }.map { it.id }.toSet()
+
             // mapping
-            val entities = remoteAlbums.map { dto ->
+            val entitiesToInsert = remoteAlbums.map { dto ->
                 AlbumEntity(
                     id = dto.id,
                     albumId = dto.albumId,
                     title = dto.title,
                     url = dto.url,
-                    thumbnailUrl = dto.thumbnailUrl
+                    thumbnailUrl = dto.thumbnailUrl,
+                    isFavorite = favoritesIds.contains(dto.id) // check if album is favorite
                 )
             }
 
-            albumDao.clearAll()
-            albumDao.insertAlbums(entities)
+            albumDao.insertAlbums(entitiesToInsert)
 
             // emit success result
             val updatedCache = albumDao.getAllAlbums().first().map { it.toAlbum() }
@@ -47,13 +50,17 @@ class AlbumRepositoryImpl(
 
         } catch (e: Exception) {
             // emit error result
-            Log.e("AlbumRepositoryImpl", "getAlbums: ", e)
             emit(AlbumResult.Error(
                 message = "Failed to get album list. Please try again later.",
-                data = cache
+                data = localAlbums
             ))
+            Log.e("AlbumRepository", "getAlbums fail: $e")
         }
     }
 
     override fun getAlbumById(id: Int): Flow<Album?> = albumDao.getAlbumById(id).map { it?.toAlbum() }
+
+    override suspend fun toggleFavorite(albumId: Int, isFavorite: Boolean) {
+        albumDao.toggleFavorite(albumId, isFavorite)
+    }
 }

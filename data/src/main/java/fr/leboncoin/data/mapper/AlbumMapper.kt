@@ -19,5 +19,6 @@ fun AlbumEntity.toAlbum(): Album = Album(
     albumId = albumId,
     title = title,
     url = url,
-    thumbnailUrl = thumbnailUrl
+    thumbnailUrl = thumbnailUrl,
+    isFavorite = isFavorite
 )

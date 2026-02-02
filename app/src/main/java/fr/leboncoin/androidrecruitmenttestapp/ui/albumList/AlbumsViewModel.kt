@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
-import fr.leboncoin.domain.repository.AlbumRepository
+import fr.leboncoin.domain.usecases.GetAlbumsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AlbumsViewModel @Inject constructor(
-    private val repository: AlbumRepository,
+    private val getAlbumsUseCase: GetAlbumsUseCase,
 ) : ViewModel() {
 
     private val _albums = MutableStateFlow<AlbumResult<List<Album>>>(AlbumResult.Loading())
@@ -26,7 +26,7 @@ class AlbumsViewModel @Inject constructor(
 
     fun loadAlbums() {
         viewModelScope.launch {
-            repository.getAlbums().collect { result ->
+            getAlbumsUseCase().collect { result ->
                 _albums.value = result
             }
         }

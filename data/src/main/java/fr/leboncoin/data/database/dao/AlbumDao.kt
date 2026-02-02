@@ -22,4 +22,7 @@ interface AlbumDao {
     @Query("SELECT * FROM albums WHERE id = :id")
     fun getAlbumById(id: Int): Flow<AlbumEntity?>
 
+    @Query("UPDATE albums SET isFavorite = :isFav WHERE id = :id")
+    suspend fun toggleFavorite(id: Int, isFav: Boolean)
+
 }
