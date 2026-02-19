@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.usecases.GetAlbumByIdUseCase
-import fr.leboncoin.domain.usecases.ToggleFavoriteUseCase
+import fr.leboncoin.domain.usecases.UpdateFavoriteUseCase
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -45,12 +45,12 @@ class DetailsViewModelTest {
     @Test
     fun `when initialized, fetches album details for given id`() = runTest {
         val getAlbumByIdUseCase = mockk<GetAlbumByIdUseCase>()
-        val toggleFavoriteUseCase = mockk<ToggleFavoriteUseCase>()
+        val updateFavoriteUseCase = mockk<UpdateFavoriteUseCase>()
 
         every { getAlbumByIdUseCase(42) } returns flowOf(album)
 
         val savedStateHandle = SavedStateHandle(mapOf("ALBUM_ID" to 42))
-        val viewModel = DetailsViewModel(savedStateHandle, getAlbumByIdUseCase, toggleFavoriteUseCase)
+        val viewModel = DetailsViewModel(savedStateHandle, getAlbumByIdUseCase, updateFavoriteUseCase)
 
         viewModel.album.test {
             assertEquals(null, awaitItem())

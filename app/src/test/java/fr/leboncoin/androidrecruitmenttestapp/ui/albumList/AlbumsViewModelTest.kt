@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.usecases.GetAlbumsUseCase
-import fr.leboncoin.domain.usecases.ToggleFavoriteUseCase
+import fr.leboncoin.domain.usecases.UpdateFavoriteUseCase
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -43,7 +43,7 @@ class AlbumsViewModelTest {
         val album = Album(id = 1, albumId = 1, title = "Test", url = "test", thumbnailUrl = "test", isFavorite = false)
         val albumTwo = Album(id = 2, albumId = 2, title = "Test", url = "test", thumbnailUrl = "test", isFavorite = false)
         val getAlbumsUseCase = mockk<GetAlbumsUseCase>()
-        val toggleFavoriteUseCase = mockk<ToggleFavoriteUseCase>()
+        val updateFavoriteUseCase = mockk<UpdateFavoriteUseCase>()
 
         every { getAlbumsUseCase() } returns flow {
             emit(AlbumResult.Loading(emptyList()))
@@ -51,7 +51,7 @@ class AlbumsViewModelTest {
         }
 
         //WHEN
-        val viewModel = AlbumsViewModel(getAlbumsUseCase, toggleFavoriteUseCase)
+        val viewModel = AlbumsViewModel(getAlbumsUseCase, updateFavoriteUseCase)
 
         //THEN
         viewModel.albums.test {

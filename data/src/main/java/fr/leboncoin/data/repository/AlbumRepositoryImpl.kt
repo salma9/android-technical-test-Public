@@ -69,7 +69,7 @@ class AlbumRepositoryImpl @Inject constructor(
 
     override fun getAlbumById(id: Int): Flow<Album?> = albumDao.getAlbumById(id).map { it?.toAlbum() }
 
-    override suspend fun toggleFavorite(albumId: Int, isFavorite: Boolean) {
-        albumDao.toggleFavorite(albumId, isFavorite)
+    override suspend fun updateFavoriteStatus(albumId: Int, currentStatus: Boolean) {
+        albumDao.toggleFavorite(albumId, currentStatus)
     }
 }

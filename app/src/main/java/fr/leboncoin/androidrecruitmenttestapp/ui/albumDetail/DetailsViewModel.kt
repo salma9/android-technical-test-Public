@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.leboncoin.androidrecruitmenttestapp.ui.albumDetail.DetailsActivity.Companion.EXTRA_ALBUM_ID
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.usecases.GetAlbumByIdUseCase
-import fr.leboncoin.domain.usecases.ToggleFavoriteUseCase
+import fr.leboncoin.domain.usecases.UpdateFavoriteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getAlbumByIdUseCase: GetAlbumByIdUseCase,
-    private val toggleFavoriteUseCase: ToggleFavoriteUseCase
+    private val updateFavoriteUseCase: UpdateFavoriteUseCase
 ) : ViewModel() {
 
     private val _album = MutableStateFlow<Album?>(null)
@@ -41,7 +41,7 @@ class DetailsViewModel @Inject constructor(
     fun onFavoriteClicked() {
         val currentAlbum = _album.value ?: return
         viewModelScope.launch {
-            toggleFavoriteUseCase(currentAlbum)
+            updateFavoriteUseCase(currentAlbum)
         }
     }
 

@@ -8,7 +8,7 @@ import fr.leboncoin.androidrecruitmenttestapp.utils.AnalyticsHelper
 import fr.leboncoin.domain.AlbumResult
 import fr.leboncoin.domain.model.Album
 import fr.leboncoin.domain.usecases.GetAlbumsUseCase
-import fr.leboncoin.domain.usecases.ToggleFavoriteUseCase
+import fr.leboncoin.domain.usecases.UpdateFavoriteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AlbumsViewModel @Inject constructor(
     private val getAlbumsUseCase: GetAlbumsUseCase,
-    private val toggleFavoriteUseCase: ToggleFavoriteUseCase
+    private val updateFavoriteUseCase: UpdateFavoriteUseCase
 ) : ViewModel() {
 
     private val _albums = MutableStateFlow<AlbumResult<List<Album>>>(AlbumResult.Loading())
@@ -42,7 +42,7 @@ class AlbumsViewModel @Inject constructor(
         viewModelScope.launch {
             Log.d("FAV", "Clic sur l'album ${album.id}, ancien état: ${album.isFavorite}")
             try {
-                toggleFavoriteUseCase(album)
+                updateFavoriteUseCase(album)
                  analyticsHelper.trackSelection("favorite_toggled ${album.id}")
             } catch (e: Exception) {
                 Log.e("AlbumsViewModel", "Erreur lors du switch favori", e)
